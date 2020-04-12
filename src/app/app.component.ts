@@ -1,3 +1,4 @@
+import { AppService } from './app.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular-testing';
+  constructor(public appService: AppService) {}
+
+  increment() {
+    this.appService.increment();
+  }
 }

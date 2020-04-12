@@ -5,10 +5,11 @@ import { Injectable } from '@angular/core';
 })
 export class AppService {
 
-  number = 19;
-  constructor() { }
+  value = 1;
 
-  getCrazyNumber() {
-    return this.number;
+  increment() {
+    setTimeout(() => {
+      this.value += 1;
+    }, 5000);
   }
 }

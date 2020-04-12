@@ -1,31 +1,37 @@
-import { TestBed, async } from '@angular/core/testing';
+import { AppService } from './app.service';
+import { TestBed, async, tick, fakeAsync } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { By } from '@angular/platform-browser';
 
-describe('AppComponent', () => {
+
+fdescribe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent
-      ],
+      ], providers: [AppService],
     }).compileComponents();
   }));
 
-  it('should create the app', () => {
+  it('should increment in template after 5 seconds', fakeAsync(() => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  });
+    const debugElement = fixture.debugElement;
 
-  it(`should have as title 'angular-testing'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('angular-testing');
-  });
+    debugElement
+        .query(By.css('button.increment'))
+        .triggerEventHandler('click', null);
 
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+     // flush() - wait for macrotask queue to be empty
+    tick(2000);
     fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to angular-testing!');
-  });
+    let value;
+    value = debugElement.query(By.css('h1')).nativeElement.innerText;
+    expect(value).toEqual('1');
+
+    tick(3000);
+    fixture.detectChanges();
+
+    value = debugElement.query(By.css('h1')).nativeElement.innerText;
+    expect(value).toEqual('2');
+  }));
 });
