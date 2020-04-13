@@ -8,7 +8,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class ChildComponent implements OnInit {
   @Input() user;
   @Output() selected = new EventEmitter<any>();
-  click() { this.selected.emit(this.user); }
+  click() { 
+    this.selected.emit(this.user);
+  }
   constructor() { }
 
   ngOnInit() {

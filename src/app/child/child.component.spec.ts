@@ -2,6 +2,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChildComponent } from './child.component';
 import { By } from '@angular/platform-browser';
+import { Component } from '@angular/core';
+
+@Component({
+  template: `
+    <app-child
+      [user]="user" (selected)="onSelected($event)">
+  </app-child>`
+})
+class TestHostComponent {
+  user = {id: 42, name: 'Test Name' };
+  selectedUser;
+  onSelected(user) { 
+    this.selectedUser = user; 
+  }
+}
 
 fdescribe('ChildComponent', () => {
   let component: ChildComponent;
@@ -11,7 +26,7 @@ fdescribe('ChildComponent', () => {
   let expectedUser;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChildComponent ]
+      declarations: [ ChildComponent, TestHostComponent ]
     })
     .compileComponents();
   }));
@@ -39,10 +54,12 @@ fdescribe('ChildComponent', () => {
   });
 
   it('should raise selected event when clicked (triggerEventHandler)', () => {
-    let selectedUser;
-    component.selected.subscribe((user) => selectedUser = user);
+    const testFixture  = TestBed.createComponent(TestHostComponent);
+    const testHost = testFixture.componentInstance;
+    const testUserEl = fixture.nativeElement.querySelector('.user');
+    testFixture.detectChanges();
 
-    userDe.triggerEventHandler('click', null);
-    expect(selectedUser).toBe(expectedUser);
+    testUserEl.click();
+    expect(testHost.selectedUser).toBe(testHost.user);
   });
 });
