@@ -7,4 +7,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular-testing';
+  users = [{name: 'Sam', id: 1}, {name: 'Phil', id: 2}];
+  gotoDetail() {};
 }
